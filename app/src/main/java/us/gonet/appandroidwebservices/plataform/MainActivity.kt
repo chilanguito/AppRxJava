@@ -49,7 +49,9 @@ class MainActivity : AppCompatActivity(),MvpInterface.View,MvpInterface.BaseView
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
-        basePresenter= BasePresenter()
+        recycler= recycler_view
+        recycler.layoutManager=LinearLayoutManager(this)
+        basePresenter= BasePresenter(this)
         basePresenter.onSubscribe()
     }
 
@@ -74,9 +76,7 @@ class MainActivity : AppCompatActivity(),MvpInterface.View,MvpInterface.BaseView
     }
 
     override fun showDataListRecyclerView(lista: ArrayList<ModelCrime>) {
-        recycler= recycler_view
         adapterRecycler= AdapterRecycler(lista)
-        recycler.layoutManager=LinearLayoutManager(this)
         recycler.adapter= adapterRecycler
     }
 }
