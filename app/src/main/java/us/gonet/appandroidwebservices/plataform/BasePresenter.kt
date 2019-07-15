@@ -4,42 +4,41 @@ import android.annotation.SuppressLint
 import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import rx.Subscriber
 import us.gonet.appandroidwebservices.data.ClientRetrofitService
 import us.gonet.appandroidwebservices.data.models.ModelCrime
 import us.gonet.appandroidwebservices.presentation.MvpInterface
 
-class BasePresenter<V : MvpInterface.BaseView>(private var view:MvpInterface.View) {
-
-    private var subscriber: Subscriber<*>? = null
-    private var disposable: CompositeDisposable? = CompositeDisposable()
+class BasePresenter(private var view: MvpInterface.View) {
 
     @Suppress("UNCHECKED_CAST")
     @SuppressLint("CheckResult")
     fun onSubscribe() {
+        handlePetition()
+    }
+
+    private fun handlePetition() {
+        val disposable = CompositeDisposable()
         val petition = ClientRetrofitService.obtenerListaRx()
-        disposable?.add(petition.getListService()
+        disposable.add(petition.getListService()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe {
-                Log.d("Llave", it.toString())
-                view.showDataListRecyclerView(it as ArrayList<ModelCrime>)
+            .subscribeWith(object : DisposableObserver<ArrayList<ModelCrime>>() {
+                override fun onComplete() {
+                    view.showToast()
+                }
+
+                override fun onNext(t: ArrayList<ModelCrime>) {
+                    view.showDataListRecyclerView(t)
+                    Log.d("RESPONSE", t.toString())
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.e("ERROR", e.stackTrace.toString())
+                }
+
             })
-
-    }
-
-    private fun handleResponse(list: ArrayList<ModelCrime>) {
-        view.showDataListRecyclerView(list)
-    }
-
-    private fun handleError(t: Throwable) {
-        t.printStackTrace()
-    }
-
-    protected fun unSubscribe() {
-        if (subscriber != null) {
-            subscriber!!.unsubscribe()
-        }
+        )
     }
 }

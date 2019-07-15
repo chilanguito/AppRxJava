@@ -18,4 +18,14 @@
     </androidx.recyclerview.widget.RecyclerView>
 
 
+    <ProgressBar
+            android:layout_centerHorizontal="true"
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="102dp"
+            android:layout_height="81dp"
+            android:visibility="gone">
+    </ProgressBar>
+
+
 </RelativeLayout>

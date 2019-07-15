@@ -6,9 +6,9 @@ import us.gonet.appandroidwebservices.data.models.ModelCrime
 interface MvpInterface {
 
     interface View{
-        fun showDataListRecyclerView(lista:ArrayList<ModelCrime>)
+        fun showDataListRecyclerView(list:ArrayList<ModelCrime>)
         fun showProgressDialog()
-
+        fun showToast()
     }
 
     interface Presenter
