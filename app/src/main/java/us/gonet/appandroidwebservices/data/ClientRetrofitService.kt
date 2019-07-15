@@ -6,15 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ClientRetrofitService {
 
-    fun obtenerLista(): ApiService {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://data.police.uk/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        return retrofit.create(ApiService::class.java)
-    }
-
-    fun obtenerListaRx(): ApiService {
+    fun getListRxWS(): ApiService {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://data.police.uk/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

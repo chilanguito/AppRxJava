@@ -24,16 +24,16 @@ class AdapterRecycler(private var list: ArrayList<ModelCrime>) : RecyclerView.Ad
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private var fecha: TextView = itemView.fecha
-        private var rangoEdad: TextView = itemView.rango_edad
-        private var genero: TextView = itemView.genero
+        private var date: TextView = itemView.fecha
+        private var rangeAge: TextView = itemView.rango_edad
+        private var gender: TextView = itemView.genero
         private var etnia: TextView = itemView.etnia
 
 
         fun bind(list: ArrayList<ModelCrime>) {
-            fecha.text = list[adapterPosition].datetime
-            rangoEdad.text = list[adapterPosition].age_range
-            genero.text = list[adapterPosition].gender
+            date.text = list[adapterPosition].datetime
+            rangeAge.text = list[adapterPosition].age_range
+            gender.text = list[adapterPosition].gender
             etnia.text = list[adapterPosition].self_defined_ethnicity
         }
     }

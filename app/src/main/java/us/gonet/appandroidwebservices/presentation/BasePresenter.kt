@@ -1,45 +1,38 @@
 package us.gonet.appandroidwebservices.presentation
 
+import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
-import rx.Observable
-import rx.Subscriber
-import rx.schedulers.Schedulers
-import rx.subscriptions.CompositeSubscription
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
+import us.gonet.appandroidwebservices.data.ClientRetrofitService
+import us.gonet.appandroidwebservices.data.models.ModelCrime
 
-import us.gonet.appandroidwebservices.data.ApiService
+class BasePresenter(private var view: MvpInterface.View) : MvpInterface.Presenter {
 
-class BasePresenter<V : MvpInterface.BaseView> {
+    override fun handlePetition() {
+        view.showProgressBar()
+        val disposable = CompositeDisposable()
+        val petition = ClientRetrofitService.getListRxWS()
+        disposable.add(petition.getListService()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribeWith(object : DisposableObserver<ArrayList<ModelCrime>>() {
+                override fun onComplete() {
+                    view.showToast()
+                }
 
-    private lateinit var view : MvpInterface.View
-    private var compositeSubscription: CompositeSubscription? = null
-    private var subscriber: Subscriber<*>? = null
+                override fun onNext(t: ArrayList<ModelCrime>) {
+                    view.showDataListRecyclerView(t)
+                    Log.d("RESPONSE", t.toString())
+                    view.hideProgressBar()
+                }
 
+                override fun onError(e: Throwable) {
+                    Log.e("ERROR", e.stackTrace.toString())
+                }
 
-    fun dettachView() {
-        if (compositeSubscription != null && compositeSubscription!!.hasSubscriptions()) {
-            compositeSubscription!!.unsubscribe()
-        }
-    }
-
-    protected fun onSubscribe(observable: Observable<*>, subscriber: Subscriber<*>) {
-        this.subscriber = subscriber
-
-        if (compositeSubscription == null) {
-            compositeSubscription = CompositeSubscription()
-        }
-
-
-        compositeSubscription!!.add(
-            observable
-                .subscribeOn(Schedulers.io())
-                .observeOn( AndroidSchedulers.mainThread() as rx.Scheduler)
-                .subscribe())
-        //no se ha suscrito
-    }
-
-    protected fun unSubscribe() {
-        if (subscriber != null) {
-            subscriber!!.unsubscribe()
-        }
+            })
+        )
     }
 }
