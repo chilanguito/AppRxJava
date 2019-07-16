@@ -12,22 +12,17 @@ import us.gonet.appandroidwebservices.data.models.ModelCrime
 import us.gonet.appandroidwebservices.presentation.BasePresenter
 import us.gonet.appandroidwebservices.presentation.MvpInterface
 
-
-class MainActivity : AppCompatActivity(),MvpInterface.View {
-
-    private lateinit var adapterRecycler: AdapterRecycler
-    private lateinit var basePresenter: MvpInterface.Presenter
+class MainActivity : AppCompatActivity(), MvpInterface.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         progressBar.max = 10
-        recycler_view.layoutManager=LinearLayoutManager(this)
-        basePresenter= BasePresenter(this)
+        recycler_view.layoutManager = LinearLayoutManager(this)
+        val basePresenter = BasePresenter(this)
         basePresenter.handlePetition()
     }
-
 
     override fun showProgressBar() {
         progressBar.visibility = View.VISIBLE
@@ -35,17 +30,15 @@ class MainActivity : AppCompatActivity(),MvpInterface.View {
     }
 
     override fun showDataListRecyclerView(list: ArrayList<ModelCrime>) {
-        adapterRecycler= AdapterRecycler(list)
-        recycler_view.adapter= adapterRecycler
+        val adapterRecycler = AdapterRecycler(list)
+        recycler_view.adapter = adapterRecycler
     }
 
     override fun showToast() {
         Toast.makeText(this, "Se ha hecho la petición existosamente", Toast.LENGTH_LONG).show()
     }
+
     override fun hideProgressBar() {
         progressBar.visibility = View.INVISIBLE
     }
-
-
-
 }

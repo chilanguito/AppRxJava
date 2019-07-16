@@ -29,7 +29,6 @@ class AdapterRecycler(private var list: ArrayList<ModelCrime>) : RecyclerView.Ad
         private var gender: TextView = itemView.genero
         private var etnia: TextView = itemView.etnia
 
-
         fun bind(list: ArrayList<ModelCrime>) {
             date.text = list[adapterPosition].datetime
             rangeAge.text = list[adapterPosition].age_range

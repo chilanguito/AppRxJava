@@ -15,6 +15,4 @@ interface MvpInterface {
         fun handlePetition()
     }
 
-    interface Model
-
 }
